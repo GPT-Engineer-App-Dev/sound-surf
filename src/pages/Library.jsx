@@ -1,8 +1,16 @@
+import { useEffect, useState } from "react";
 import { Box, Container, Flex, Text, VStack, HStack, Link, Image, Button } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import { FaHome, FaMusic, FaBook, FaUser } from "react-icons/fa";
 
-const Index = () => {
+const Library = () => {
+  const [playlists, setPlaylists] = useState([]);
+
+  useEffect(() => {
+    const storedPlaylists = JSON.parse(localStorage.getItem("playlists")) || [];
+    setPlaylists(storedPlaylists);
+  }, []);
+
   return (
     <Box>
       {/* Navigation Bar */}
@@ -38,21 +46,16 @@ const Index = () => {
       {/* Main Section */}
       <Container maxW="container.xl" py={10}>
         <VStack spacing={8}>
-          <Text fontSize="3xl" fontWeight="bold">Featured Playlists</Text>
+          <Text fontSize="3xl" fontWeight="bold">Your Playlists</Text>
+          <Button as={NavLink} to="/create-playlist" colorScheme="blue">Create New Playlist</Button>
           <Flex wrap="wrap" justifyContent="space-around">
-            {/* Example Playlist */}
-            <Box bg="gray.700" color="white" p={4} borderRadius="md" width="200px" textAlign="center">
-              <Image src="https://via.placeholder.com/150" alt="Playlist Cover" mb={4} borderRadius="md" />
-              <Text>Playlist Name</Text>
-            </Box>
-            <Box bg="gray.700" color="white" p={4} borderRadius="md" width="200px" textAlign="center">
-              <Image src="https://via.placeholder.com/150" alt="Playlist Cover" mb={4} borderRadius="md" />
-              <Text>Playlist Name</Text>
-            </Box>
-            <Box bg="gray.700" color="white" p={4} borderRadius="md" width="200px" textAlign="center">
-              <Image src="https://via.placeholder.com/150" alt="Playlist Cover" mb={4} borderRadius="md" />
-              <Text>Playlist Name</Text>
-            </Box>
+            {playlists.map((playlist, index) => (
+              <Box key={index} bg="gray.700" color="white" p={4} borderRadius="md" width="200px" textAlign="center">
+                <Image src="https://via.placeholder.com/150" alt="Playlist Cover" mb={4} borderRadius="md" />
+                <Text>{playlist.name}</Text>
+                <Text fontSize="sm">{playlist.description}</Text>
+              </Box>
+            ))}
           </Flex>
         </VStack>
       </Container>
@@ -74,4 +77,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Library;
